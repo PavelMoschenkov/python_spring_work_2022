@@ -1,3 +1,5 @@
+
+
 # Написать игру "Поле чудес"
 
 #Отгадываемые слова и описание лежат в разных  массивах по одинаковому индексу.
@@ -26,44 +28,39 @@
 #Введите букву:
 
 
+import random as rd
+word_index = [0, 1, 2]
+word_index = rd.sample(word_index, 3) #3 рандом числа
+
+
+
 print("""Добро пожаловать в игру: Поле чудес!""")
-questions = [{'question': 'Спортивная машина с конем на значке?',
-              'answer': 'ФЕРРАРИ'},
-             {'question': 'На чем летают люди на длительные растояния?',
-              'answer': 'САМОЛЕТ'},
-             {'question': 'Что пьют по утрам в Лондоне?',
-              'answer': 'ЧАЙ'}
-             ]
-q = int(input('Введите номер вопроса: '))
-d = {}
-b = {}
-x = []
-s = ''
-i = 0
+questions = ['Спортивная машина с конем на значке?', 'На чем летают люди на длительные растояния?', 'Что пьют по утрам в Лондоне?']
+answers = ['ФЕРРАРИ', 'САМОЛЕТ', 'ЧАЙ']
 
-d = questions[q - 1]
-answer = d['answer']
-print('Вопрос:', d['question'])
-print('Ответ:', '▒' * len(answer))
 
-while i < len(answer):
-    x.append('▒')
-    i += 1
-while s != answer:
-    symbol = input('Введите букву: ').upper()
-    for i in range(len(answer)):
-        if symbol != answer[i]:
-            flag = False
-        elif symbol == answer[i]:
-            if answer[i] in b:
-                b[answer[i]].append(i)
-            else:
-                b[answer[i]] = [i]
-    for j in b:
-        for k in b[j]:
-            x[k] = j
-    for l in range(len(x)):
-        if x[l] != '▒':
-            s += x[l]
 
-    print(x)
+for attempt in word_index:
+    curr_answer = list(answers[attempt])
+    print(f"Ваш вопрос: {''.join(questions[attempt])}")
+    errors = 0
+    word = list('▒' * len(answers[attempt]))
+    while errors < 10:
+        print(f"Отгадано на данный момент: {''.join(word)}")
+        letter = input('Введите букву')
+        if (letter in curr_answer) and (letter not in word):
+            ind1 = -1
+            for num_letter in range(curr_answer.count(letter)):
+                ind1 = curr_answer.index(letter, ind1+1)
+                word[ind1] = letter
+            print("Верно!")
+        elif letter in word:
+            print("Вы уже использовали эту букву")
+        else:
+            errors += 1
+            print("Ошибка! Этой буквы нет в слове")
+            print(f"У вас осталось {10 - errors} попыток")
+print("Игра закончена")
+
+
+
